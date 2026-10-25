@@ -685,11 +685,18 @@ function fx(k,night){
   if(night&&(k==='clear'||k==='part'))for(let i=0;i<22;i++)add('star',`left:${Math.random()*100}%;top:${Math.random()*70}%;animation-delay:-${Math.random()*3}s`);
   if(k==='storm')add('flash');
 }
+let wxOk=0,wxBusy=0;
 async function loadWeather(){
+  if(wxBusy)return;wxBusy=1;try{await loadWeather_()}finally{wxBusy=0}
+}
+async function loadWeather_(){
   const q=`https://api.open-meteo.com/v1/forecast?latitude=${KANDY.lat}&longitude=${KANDY.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FColombo&forecast_days=5`;
   try{
-    const r=await fetch(q);if(!r.ok)throw 0;
-    const d=await r.json(),c=d.current,k=kind(c.weather_code),night=!c.is_day;
+    const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),12000);
+    let r;try{r=await fetch(q+'&_='+Date.now(),{cache:'no-store',signal:ctl.signal})}finally{clearTimeout(to)}
+    if(!r.ok)throw 0;
+    const d=await r.json(),c=d.current;if(!c||c.temperature_2m==null)throw 0;
+    const k=kind(c.weather_code),night=!c.is_day;
     const sk=night&&(k==='clear'||k==='part')?SKY.night:SKY[k];
     const p=$('wxp');p.style.setProperty('--sky',`linear-gradient(160deg,${sk[0]},${sk[1]})`);
     p.dataset.k=k;night?p.dataset.n='1':delete p.dataset.n;fx(k,night);
@@ -698,12 +705,19 @@ async function loadWeather(){
       <div class="stats"><div><b>${c.relative_humidity_2m}%</b>Humidity</div><div><b>${Math.round(c.wind_speed_10m)} km/h</b>Wind</div><div><b>${d.daily.precipitation_probability_max[0]}%</b>Rain chance</div></div>
       <div class="days">${d.daily.time.map((t,i)=>`<div><b>${i?fmt(toDate(t),{weekday:'short'}):'Today'}</b>${icon(kind(d.daily.weather_code[i]))}${Math.round(d.daily.temperature_2m_max[i])}&deg; / ${Math.round(d.daily.temperature_2m_min[i])}&deg;</div>`).join('')}</div>`;
     $('wu').textContent='Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    wxOk=Date.now();
   }catch(e){
+    if(wxOk){$('wu').textContent='Offline - showing last update';return}
     $('wx').innerHTML='<p class="skel">Could not load the forecast. Check your internet connection, then try again.</p><button class="pill" id="retry" type="button">Retry</button>';
     $('retry').onclick=()=>{$('wx').innerHTML='<p class="skel">Loading forecast...</p>';loadWeather()};
   }
 }
-loadWeather();setInterval(loadWeather,15*60*1000);
+loadWeather();setInterval(loadWeather,10*60*1000);
+/* timers freeze in background tabs / sleeping devices: refresh when the page is seen again */
+const wxFresh=()=>{if(!document.hidden&&Date.now()-wxOk>5*60*1000)loadWeather()};
+document.addEventListener('visibilitychange',wxFresh);
+addEventListener('focus',wxFresh);
+addEventListener('online',()=>loadWeather());
 
 /* ---------- Holiday calendar ---------- */
 const today=new Date();today.setHours(0,0,0,0);
