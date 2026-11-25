@@ -104,8 +104,8 @@ input:focus{outline:none;border-color:var(--ink)}
 [data-k=clear]:not([data-n]) .fx{background:radial-gradient(circle at 88% 6%,rgba(255,236,160,.9),transparent 42%);animation:glow 4s ease-in-out infinite alternate}
 @keyframes glow{to{opacity:.5}}
 .drop{position:absolute;top:-20px;width:2px;height:18px;background:linear-gradient(transparent,rgba(255,255,255,.75));animation:fall linear infinite}
-@keyframes fall{to{top:105%}}
-.cloud{position:absolute;left:-200px;width:170px;height:56px;border-radius:99px;background:#fff;filter:blur(12px);animation:cdrift linear infinite}
+@keyframes fall{to{transform:translateY(520px)}}
+.cloud{position:absolute;left:-200px;width:170px;height:56px;border-radius:99px;background:radial-gradient(closest-side,#fff,transparent);animation:cdrift linear infinite}
 @keyframes cdrift{to{transform:translateX(640px)}}
 .star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:tw 2.4s ease-in-out infinite}
 @keyframes tw{50%{opacity:.2;transform:scale(.6)}}
@@ -164,7 +164,7 @@ input:focus{outline:none;border-color:var(--ink)}
 .up li span{opacity:.65;white-space:nowrap}.up em{font-style:normal;color:#FF9B8F;font-size:11px;margin-left:6px}
 footer{margin-top:10px;color:var(--mute);font-size:11px;text-align:center;flex:none}
 .tabs{display:none;position:relative;flex:none;margin-top:10px;padding:5px 5px calc(5px + env(safe-area-inset-bottom,0px));background:var(--panel);border-radius:24px;box-shadow:0 14px 30px -16px var(--shadow)}
-.tabs i{position:absolute;top:5px;bottom:calc(5px + env(safe-area-inset-bottom,0px));left:5px;width:calc((100% - 10px)/4);border-radius:19px;background:var(--on);transition:transform .5s var(--spring);transform:translateX(calc(var(--n,0)*100%))}
+.tabs i{position:absolute;top:5px;bottom:calc(5px + env(safe-area-inset-bottom,0px));left:5px;width:calc((100% - 10px)/var(--tn,4));border-radius:19px;background:var(--on);transition:transform .5s var(--spring);transform:translateX(calc(var(--n,0)*100%))}
 .tabs button{position:relative;flex:1;background:none;border:0;color:var(--mute);font:700 13px var(--body);padding:11px 2px;cursor:pointer;transition:color .25s}
 .tabs button.on{color:var(--onfg)}
 :focus-visible{outline:3px solid var(--coral);outline-offset:2px}
@@ -219,7 +219,7 @@ header{position:relative}
 .logo svg{width:100%;height:100%;display:block}.logo .orb{transform-origin:16px 16px;animation:spin 14s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 h1{background:linear-gradient(90deg,var(--ink),color-mix(in srgb,var(--ink) 55%,var(--a2)));-webkit-background-clip:text;background-clip:text;color:transparent}
 .panel,#xapp .c{background:linear-gradient(150deg,rgba(255,255,255,.07),rgba(255,255,255,0) 55%),var(--panel);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,255,255,.05),0 26px 50px -30px var(--shadow)}
-@media(hover:hover){.panel:not(.weather):not(.next),#xapp .c{background:linear-gradient(150deg,rgba(255,255,255,.08),rgba(255,255,255,0) 55%),color-mix(in srgb,var(--panel) 74%,transparent);backdrop-filter:blur(20px) saturate(1.35);-webkit-backdrop-filter:blur(20px) saturate(1.35)}}
+@media(hover:hover){.panel:not(.weather):not(.next),#xapp .c{background:linear-gradient(150deg,rgba(255,255,255,.08),rgba(255,255,255,0) 55%),color-mix(in srgb,var(--panel) 74%,transparent)}}
 .clock,.theme{box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 12px 26px -18px var(--shadow)}
 .panel h2{font-family:var(--display);letter-spacing:-.02em}
 /* sticky section nav */
@@ -340,6 +340,15 @@ header{order:0}#xtop{position:sticky;top:8px;z-index:30;align-self:center;margin
  .fab{right:18px;bottom:calc(94px + env(safe-area-inset-bottom,0px))}
  #xapp .hero{flex-direction:row}
 }
+.gcard[hidden]{display:none}
+.x2{width:28px;height:28px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;cursor:pointer;font-size:15px}
+.set{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--soft)}
+.credit{text-align:center;color:var(--mute);font-size:12px;margin-top:6px}
+html[data-china="0"] .cal,html[data-china="0"] .next,html[data-china="0"] #tabs [data-t=cal],html[data-china="0"] #tabs [data-t=next],html[data-cn="0"] #cnClock{display:none!important}
+html[data-china="0"] .weather{grid-column:span 12}
+html[data-lite] body::before{animation:none}html[data-lite] .fx *,html[data-lite] .logo .orb,html[data-lite] .rays{animation:none!important}
+html.bg *,html.bg *::before{animation-play-state:paused!important}
+@media(max-width:900px){footer{display:block;margin-top:4px}}
 </style>
 </head>
 <body>
@@ -347,8 +356,9 @@ header{order:0}#xtop{position:sticky;top:8px;z-index:30;align-self:center;margin
   <header>
     <div class="brand"><span class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C8CFF"/><stop offset="1" stop-color="#C06BFF"/></linearGradient></defs><rect width="32" height="32" rx="10" fill="url(#lg)"/><g class="orb"><ellipse cx="16" cy="16" rx="9.5" ry="4.2" fill="none" stroke="#fff" stroke-width="1.8" transform="rotate(-28 16 16)"/><circle cx="23.2" cy="11.7" r="1.9" fill="#fff" transform="rotate(0 16 16)"/></g><circle cx="16" cy="16" r="3.6" fill="#fff"/></svg></span><div><h1>Orbit</h1><p class="sub" id="greet"></p></div></div>
     <div class="clocks">
-      <div class="clock"><i></i><b id="tK">--:--:--</b><span>Kandy</span></div>
-      <div class="clock"><i></i><b id="tB">--:--:--</b><span>Beijing</span></div>
+      <div class="clock"><i></i><b id="tK">--:--:--</b><span id="tkl">Local</span></div>
+      <div class="clock" id="cnClock"><i></i><b id="tB">--:--:--</b><span id="tbd">Beijing</span></div>
+      <button class="theme" id="gear" type="button" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></button>
       <button class="theme" id="theme" type="button" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg></button>
     </div>
   </header>
@@ -373,7 +383,7 @@ header{order:0}#xtop{position:sticky;top:8px;z-index:30;align-self:center;margin
     </section>
     <section class="panel weather" id="wxp" style="--i:2" aria-labelledby="hw">
       <div class="fx" id="fx"></div>
-      <h2 id="hw">Weather in Kandy <small id="wu"></small></h2>
+      <h2 id="hw"><span id="wt">Weather</span> <span class="hr"><small id="wu"></small><button class="x2" id="locb" type="button" aria-label="Update my location">&#9678;</button></span></h2>
       <div id="wx"><p class="skel">Loading forecast...</p></div>
     </section>
     <section class="panel cal" style="--i:3" aria-labelledby="hc">
@@ -408,7 +418,18 @@ header{order:0}#xtop{position:sticky;top:8px;z-index:30;align-self:center;margin
     <input id="pw" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password" minlength="6" required>
     <button class="pill" type="submit">Sign in</button>
     <button class="ghost" type="button" id="signup">Create account</button>
+    <button class="ghost" type="button" id="forgot">Forgot password?</button>
     <p class="msg" id="amsg" role="status"></p>
+    <p class="credit">Developed by Sethil</p>
+  </form>
+  <form class="gcard" id="resetf" hidden>
+    <h2>New password</h2>
+    <p class="sub">Choose a new password for your account.</p>
+    <input id="np" type="password" placeholder="New password (min 6 characters)" autocomplete="new-password" minlength="6" required>
+    <input id="np2" type="password" placeholder="Repeat new password" autocomplete="new-password" minlength="6" required>
+    <button class="pill" type="submit">Save password</button>
+    <p class="msg" id="rmsg" role="status"></p>
+    <p class="credit">Developed by Sethil</p>
   </form>
 </div>
 <script>
@@ -446,20 +467,26 @@ $('theme').onclick=()=>{
   document.querySelector('meta[name=theme-color]').content=t==='light'?'#E8ECF4':'#0A0F20';
   try{localStorage.setItem('dash-theme',t)}catch(e){}
 };
-/* background parallax */
-addEventListener('pointermove',e=>{
-  document.body.style.setProperty('--bx',((e.clientX/innerWidth-.5)*-16)+'px');
-  document.body.style.setProperty('--by',((e.clientY/innerHeight-.5)*-16)+'px');
-});
-
+/* ---------- preferences (per device) ---------- */
+let P=Object.assign({china:1,cn:1,units:'c',lite:-1},(()=>{try{return JSON.parse(localStorage.getItem('orbit-prefs'))||{}}catch(e){return{}}})());
+const isLite=()=>P.lite<0?(navigator.deviceMemory<=2||navigator.hardwareConcurrency<=2):!!P.lite;
+function applyP(){const h=document.documentElement;h.dataset.china=P.china?1:0;h.dataset.cn=P.cn?1:0;isLite()?h.dataset.lite=1:delete h.dataset.lite;
+  $('tabs').style.setProperty('--tn',P.china?4:2);
+  if(!P.china&&document.querySelector('.panel.cal.on,.panel.next.on'))show('links');gm=''}
+function setP(k,v){P[k]=v;try{localStorage.setItem('orbit-prefs',JSON.stringify(P))}catch(e){}applyP();tick();if(k==='units')loadWeather(1)}
+document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('bg',document.hidden));
 /* clocks + greeting */
+const tzOff=tz=>{const f=t=>{const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:t,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'}).formatToParts(new Date()).map(x=>[x.type,+x.value]));return Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute)/6e4};return f(tz)-f(Intl.DateTimeFormat().resolvedOptions().timeZone)};
+let gm='';
 function tick(){
-  const now=new Date(),t=tz=>now.toLocaleTimeString('en-GB',{timeZone:tz,hour12:false});
-  $('tK').textContent=t('Asia/Colombo');$('tB').textContent=t('Asia/Shanghai');
-  const h=+now.toLocaleTimeString('en-GB',{timeZone:'Asia/Colombo',hour:'2-digit',hour12:false});
-  $('greet').textContent=(h<12?'Good morning':h<18?'Good afternoon':'Good evening')+' - '+fmt(now,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const now=new Date(),h=now.getHours();
+  $('tK').textContent=now.toLocaleTimeString('en-GB',{hour12:false});
+  if(P.cn)$('tB').textContent=now.toLocaleTimeString('en-GB',{timeZone:'Asia/Shanghai',hour12:false});
+  const k=h+'/'+now.getMinutes();
+  if(k!==gm){gm=k;$('greet').textContent=(h<12?'Good morning':h<18?'Good afternoon':'Good evening')+' - '+fmt(now,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    if(P.cn){const o=tzOff('Asia/Shanghai'),a=Math.abs(o);$('tbd').textContent='Beijing'+(o?' '+(o>0?'+':'-')+Math.floor(a/60)+(a%60?':'+pad(a%60):'')+'h':'')}}
 }
-tick();setInterval(tick,1000);
+applyP();tick();setInterval(()=>{if(!document.hidden)tick()},1000);
 
 /* ---------- Links ---------- */
 let links;let syncTxt='';let pendingOps=0;
@@ -660,7 +687,33 @@ $('signout').onclick=()=>{
   showGate();
 };
 renderLinks('all');
-if(sess){gate.hidden=true;sbLoad()}
+const H=new URLSearchParams(location.hash.slice(1));
+const REC=H.get('type')==='recovery'&&H.get('access_token')?{at:H.get('access_token'),rt:H.get('refresh_token'),ex:+H.get('expires_in')||3600}:null,HERR=H.get('error_description');
+if(REC||HERR)history.replaceState(null,'',location.pathname+location.search);
+const recUrl=()=>'recover?redirect_to='+encodeURIComponent(location.origin+location.pathname);
+$('forgot').onclick=async()=>{
+  const email=$('em').value.trim(),b=$('forgot');
+  if(!email){$('amsg').textContent='Type your email above, then tap Forgot password.';return}
+  b.disabled=true;$('amsg').textContent='Sending...';
+  try{await auth(recUrl(),{email});$('amsg').textContent='If this email has an account, a reset link is on its way. Check spam too.'}
+  catch(e){$('amsg').textContent=e.message}
+  setTimeout(()=>b.disabled=false,30000);
+};
+$('resetf').onsubmit=async e=>{
+  e.preventDefault();const a=$('np').value,m=$('rmsg');
+  if(a.length<6){m.textContent='Use at least 6 characters.';return}
+  if(a!==$('np2').value){m.textContent='The two passwords do not match.';return}
+  m.textContent='Saving...';
+  try{
+    const r=await fetch(SB+'/auth/v1/user',{method:'PUT',headers:{apikey:SB_KEY,Authorization:'Bearer '+REC.at,'Content-Type':'application/json'},body:JSON.stringify({password:a})});
+    const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.msg||d.message||'Could not update the password. Request a new link.');
+    saveSess(mkSess({access_token:REC.at,refresh_token:REC.rt,expires_in:REC.ex,user:d}));
+    $('resetf').hidden=true;$('authf').hidden=false;gate.hidden=true;$('np').value=$('np2').value='';sbLoad();
+  }catch(x){m.textContent=x.message}
+};
+if(REC){gate.hidden=false;$('authf').hidden=true;$('resetf').hidden=false}
+else if(HERR)showGate('That reset link has expired. Tap Forgot password for a new one.');
+else if(sess){gate.hidden=true;sbLoad()}
 
 /* ---------- Weather ---------- */
 const kind=c=>c===0?'clear':c<=2?'part':c===3?'cloud':(c===45||c===48)?'fog':c>=95?'storm':(c>=51&&c<=67)||(c>=80&&c<=82)?'rain':'cloud';
@@ -686,24 +739,39 @@ function fx(k,night){
   if(k==='storm')add('flash');
 }
 let wxOk=0,wxBusy=0;
-async function loadWeather(){
-  if(wxBusy)return;wxBusy=1;try{await loadWeather_()}finally{wxBusy=0}
+async function loadWeather(f){
+  if(wxBusy)return;wxBusy=1;try{await loadWeather_(f)}finally{wxBusy=0}
 }
+let LOC=null;try{LOC=JSON.parse(localStorage.getItem('orbit-loc'))}catch(e){}
+const keepLoc=()=>{try{localStorage.setItem('orbit-loc',JSON.stringify(LOC))}catch(e){}};
+const getPos=()=>new Promise((ok,no)=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>ok(p.coords),no,{timeout:10000,maximumAge:6e5}):no(0));
+async function placeName(lat,lon){try{const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`),d=await r.json();return d.city||d.locality||d.principalSubdivision||'your location'}catch(e){return 'your location'}}
+async function locate(){try{const c=await getPos(),lat=+c.latitude.toFixed(3),lon=+c.longitude.toFixed(3);LOC={lat,lon,auto:1,ts:Date.now(),name:await placeName(lat,lon)};keepLoc();return true}catch(e){return false}}
+function askLoc(msg){
+  $('wt').textContent='Weather';
+  $('wx').innerHTML=`<p class="skel">${msg}</p><div class="add"><input id="cq" placeholder="Search a city" aria-label="City"><button class="pill" id="cgo" type="button">Search</button><button class="ghost" id="cme" type="button" style="color:#fff;border-color:rgba(255,255,255,.4)">Use my location</button></div><p class="msg" id="cm"></p>`;
+  $('cme').onclick=()=>{$('wx').innerHTML='<p class="skel">Finding your location...</p>';loadWeather(1)};
+  $('cgo').onclick=async()=>{try{const r=await(await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&name='+encodeURIComponent($('cq').value.trim()))).json(),g=r.results&&r.results[0];if(!g)throw 0;LOC={lat:g.latitude,lon:g.longitude,name:g.name,auto:0};keepLoc();loadWeather(1)}catch(e){$('cm').textContent='City not found. Check the spelling.'}};
+}
+$('locb').onclick=async()=>{const old=LOC;LOC=null;await loadWeather(1);if(!LOC)LOC=old};
 async function loadWeather_(){
-  const q=`https://api.open-meteo.com/v1/forecast?latitude=${KANDY.lat}&longitude=${KANDY.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FColombo&forecast_days=5`;
+  if(!LOC||(LOC.auto&&Date.now()-(LOC.ts||0)>18e5)){const had=LOC;if(!(await locate())&&!had){askLoc('Allow location access to see the weather where you are, or search a city.');return}}
+  const U=P.units==='f',q=`https://api.open-meteo.com/v1/forecast?latitude=${LOC.lat}&longitude=${LOC.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&timezone=auto&forecast_days=5${U?'&temperature_unit=fahrenheit&wind_speed_unit=mph':''}`;
+  $('wt').textContent='Weather in '+LOC.name;$('tkl').textContent=LOC.name;
   try{
     const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),12000);
     let r;try{r=await fetch(q+'&_='+Date.now(),{cache:'no-store',signal:ctl.signal})}finally{clearTimeout(to)}
     if(!r.ok)throw 0;
     const d=await r.json(),c=d.current;if(!c||c.temperature_2m==null)throw 0;
-    const k=kind(c.weather_code),night=!c.is_day;
+    const k=kind(c.weather_code),night=!c.is_day,dy=d.daily;
     const sk=night&&(k==='clear'||k==='part')?SKY.night:SKY[k];
     const p=$('wxp');p.style.setProperty('--sky',`linear-gradient(160deg,${sk[0]},${sk[1]})`);
     p.dataset.k=k;night?p.dataset.n='1':delete p.dataset.n;fx(k,night);
     $('wx').innerHTML=`
-      <div class="now">${icon(k,night)}<div><div class="temp">${Math.round(c.temperature_2m)}<sup>&deg;C</sup></div><div class="cond">${label[k]}, feels like ${Math.round(c.apparent_temperature)}&deg;</div></div></div>
-      <div class="stats"><div><b>${c.relative_humidity_2m}%</b>Humidity</div><div><b>${Math.round(c.wind_speed_10m)} km/h</b>Wind</div><div><b>${d.daily.precipitation_probability_max[0]}%</b>Rain chance</div></div>
-      <div class="days">${d.daily.time.map((t,i)=>`<div><b>${i?fmt(toDate(t),{weekday:'short'}):'Today'}</b>${icon(kind(d.daily.weather_code[i]))}${Math.round(d.daily.temperature_2m_max[i])}&deg; / ${Math.round(d.daily.temperature_2m_min[i])}&deg;</div>`).join('')}</div>`;
+      <div class="now">${icon(k,night)}<div><div class="temp">${Math.round(c.temperature_2m)}<sup>&deg;${U?'F':'C'}</sup></div><div class="cond">${label[k]}, feels like ${Math.round(c.apparent_temperature)}&deg;</div></div></div>
+      <div class="stats"><div><b>${c.relative_humidity_2m}%</b>Humidity</div><div><b>${Math.round(c.wind_speed_10m)} ${U?'mph':'km/h'}</b>Wind</div><div><b>${dy.precipitation_probability_max[0]}%</b>Rain chance</div></div>
+      <div class="days">${dy.time.map((t,i)=>`<div><b>${i?fmt(toDate(t),{weekday:'short'}):'Today'}</b>${icon(kind(dy.weather_code[i]))}${Math.round(dy.temperature_2m_max[i])}&deg; / ${Math.round(dy.temperature_2m_min[i])}&deg;</div>`).join('')}</div>
+      <p class="cond" style="margin-top:12px">Sunrise ${dy.sunrise[0].slice(11)} &middot; Sunset ${dy.sunset[0].slice(11)} &middot; UV ${Math.round(dy.uv_index_max[0])}</p>`;
     $('wu').textContent='Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
     wxOk=Date.now();
   }catch(e){
@@ -712,7 +780,29 @@ async function loadWeather_(){
     $('retry').onclick=()=>{$('wx').innerHTML='<p class="skel">Loading forecast...</p>';loadWeather()};
   }
 }
-loadWeather();setInterval(loadWeather,10*60*1000);
+loadWeather();setInterval(()=>{if(!document.hidden)loadWeather()},10*60*1000);
+
+/* ---------- settings ---------- */
+function openSet(){
+  if($('xset'))return;
+  const on={china:!!P.china,cn:!!P.cn,units:P.units==='f',lite:isLite()};
+  const row=(k,l,d)=>`<div class="set"><div><b>${l}</b><br><small style="color:var(--mute)">${d}</small></div><button class="sw" data-k="${k}" type="button" role="switch" aria-checked="${on[k]}" aria-label="${l}"><i></i></button></div>`;
+  document.body.insertAdjacentHTML('beforeend',`<div class="xs" id="xset"><div class="xsb"></div><div class="xsh" role="dialog" aria-modal="true"><i class="grab"></i><h3 style="font:800 22px var(--display);margin-bottom:6px">Settings</h3>
+    ${row('china','China holidays','Holiday calendar and next-holiday cards')}${row('cn','China time','Beijing clock in the header')}${row('units','Fahrenheit','Show weather in &deg;F and mph')}${row('lite','Lite mode','Fewer animations for a faster, smoother app')}
+    <div class="set"><div><b>Weather location</b><br><small style="color:var(--mute)">Follows your current position</small></div><button class="ghost" id="setloc" type="button">Update</button></div>
+    ${sess?`<div class="set"><div><b>Password</b><br><small style="color:var(--mute)" id="setm">Get a reset link by email</small></div><button class="ghost" id="setpw" type="button">Send link</button></div>`:''}
+    <p class="credit">Developed by Sethil</p></div></div>`);
+  const m=$('xset');
+  m.addEventListener('click',ev=>{
+    if(ev.target.classList.contains('xsb')){m.remove();return}
+    const b=ev.target.closest('.sw');
+    if(b){const k=b.dataset.k,v=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',v);setP(k,k==='units'?(v?'f':'c'):v?1:0)}
+    else if(ev.target.id==='setloc'){m.remove();$('locb').click()}
+    else if(ev.target.id==='setpw'){$('setpw').disabled=true;auth(recUrl(),{email:sess.email}).then(()=>$('setm').textContent='Link sent. Check your inbox.').catch(x=>$('setm').textContent=x.message)}
+  });
+}
+$('gear').onclick=openSet;
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){const m=$('xset');m&&m.remove()}});
 /* timers freeze in background tabs / sleeping devices: refresh when the page is seen again */
 const wxFresh=()=>{if(!document.hidden&&Date.now()-wxOk>5*60*1000)loadWeather()};
 document.addEventListener('visibilitychange',wxFresh);
@@ -795,7 +885,7 @@ const TC={Birthday:'#ff7ab6',Anniversary:'#ff5b4a',Medicine:'#27d8a0',Bill:'#ffc
 const PC={High:'#ff6b6b',Medium:'#ffc24b',Low:'#27d8a0'},po={High:0,Medium:1,Low:2};
 const CL=['#5b6bff','#ff7ab6','#ffc24b','#27d8a0','#c06bff','#19c9e8','#ff8a5b'];
 const pr=(a,b)=>po[a.p]-po[b.p]||(a.d||'9').localeCompare(b.d||'9');
-let D=null,page='home',last='',q='',dirty=0,tm,lp=0,syn='',tf='All',nt='Notes',cp=null,cfiles=[],pdoc=null,scanT=0,stream=null,cw=false;
+let D=null,page='home',last='',q='',dirty=0,tm,lp=0,syn='',tf='All',nt='Notes',cp=null,cfiles=[],pdoc=null,scanT=0,stream=null,cw=false,aiT='',aiR='',EV={};
 try{D=JSON.parse(localStorage.getItem('d2'))}catch(x){}
 const defs=()=>({tasks:[],events:[],tx:[],bills:[],notes:[],phones:[],docs:[],cbm:[],budget:0,tax:18,fx:{},w:{week:1,tasks:1,up:1,money:1}});
 D=Object.assign(defs(),D||{});D.w=Object.assign({week:1,tasks:1,up:1,money:1},D.w||{});
@@ -823,7 +913,7 @@ const bar=(l,v,mx,c,txt)=>`<div class="br"><span>${e(l)}</span><div><i style="wi
 function cu(root){root.querySelectorAll('[data-cu]').forEach(el=>{const to=+el.dataset.cu,f=el.dataset.f,t0=performance.now(),fm=v=>f=='L'?L(v):f=='c'?v.toFixed(3):Math.round(v)+(f=='%'?'%':'');(function s(t){const p=Math.min(1,(t-t0)/800),k=1-Math.pow(1-p,3);el.textContent=fm(to*k);if(p<1)requestAnimationFrame(s)})(t0)})}
 const num=(v,f)=>`<span data-cu="${v}" data-f="${f||''}">${f=='L'?L(v):f=='c'?(+v).toFixed(3):v+(f=='%'?'%':'')}</span>`;
 /* ---------- rows ---------- */
-const row=(c,x,t,s,r,tg,ic)=>`<div class="r${x.x?' dn':''}">${ic||''}${tg?`<button class="ck" data-a="tg:${c}:${x.id}" aria-label="Mark done">${x.x?'✓':''}</button>`:''}<div class="g"><b>${e(t)}</b><small>${s}</small></div>${r||''}<button class="x d" data-a="del:${c}:${x.id}" aria-label="Delete">✕</button></div>`;
+const row=(c,x,t,s,r,tg,ic)=>`<div class="r${x.x?' dn':''}">${ic||''}${tg?`<button class="ck" data-a="tg:${c}:${x.id}" aria-label="Mark done">${x.x?'✓':''}</button>`:''}<div class="g"><b>${e(t)}</b><small>${s}</small></div>${r||''}<button class="x" data-a="ed:${c}:${x.id}" aria-label="Edit">✎</button><button class="x d" data-a="del:${c}:${x.id}" aria-label="Delete">✕</button></div>`;
 const ico=(c,t)=>`<span class="dot" style="--c:${c}">${e((t||'?').trim().charAt(0).toUpperCase())}</span>`;
 const chip=(t,c)=>`<span class="ch" style="--c:${c}">${e(t)}</span>`;
 const R={
@@ -833,7 +923,7 @@ const R={
  tx:x=>row('tx',x,x.c||x.k,e(x.d),`<b style="color:${x.k=='Income'?'#27d8a0':'#ff8a8a'}">${x.k=='Income'?'+':'−'}${L(x.a)}</b>`,0,ico(x.k=='Income'?'#27d8a0':CL[(x.c||'').length%7],x.c||x.k)),
  phones:x=>row('phones',x,x.t,e(x.n),`<a class="x" href="tel:${e(x.n)}">Call</a>`,0,ico('#19c9e8',x.t)),
  docs:x=>row('docs',x,x.t,e(x.n||'')+(x.d?' · expires '+x.d:''),x.d?chip(when(x.d),urg(x.d)):'',0,ico('#ff8a5b',x.t)),
- notes:x=>`<div class="r"><div class="g"><b>${e(x.t)}</b>${x.l?x.l.map((i,j)=>`<div style="margin-top:6px;display:flex;gap:8px;align-items:center"><button class="ck" data-a="ck:${x.id}:${j}" style="width:22px;height:22px;font-size:11px;${i.d?'background:var(--ok);border-color:var(--ok);color:#04271c':''}">${i.d?'✓':''}</button><span style="${i.d?'opacity:.5;text-decoration:line-through':''}">${e(i.t)}</span></div>`).join(''):`<small style="white-space:pre-wrap">${e(x.b)}</small>`}</div><button class="x d" data-a="del:notes:${x.id}" aria-label="Delete">✕</button></div>`
+ notes:x=>`<div class="r"><div class="g"><b>${e(x.t)}</b>${x.l?x.l.map((i,j)=>`<div style="margin-top:6px;display:flex;gap:8px;align-items:center"><button class="ck" data-a="ck:${x.id}:${j}" style="width:22px;height:22px;font-size:11px;${i.d?'background:var(--ok);border-color:var(--ok);color:#04271c':''}">${i.d?'✓':''}</button><span style="${i.d?'opacity:.5;text-decoration:line-through':''}">${e(i.t)}</span></div>`).join(''):`<small style="white-space:pre-wrap">${e(x.b)}</small>`}</div><button class="x" data-a="ed:notes:${x.id}" aria-label="Edit">✎</button><button class="x d" data-a="del:notes:${x.id}" aria-label="Delete">✕</button></div>`
 };
 const list=(c,a,m,em)=>a.length?a.slice(0,m||60).map(R[c]).join(''):`<div class="emp">${em||'Nothing here yet.'}</div>`;
 /* ---------- forms in bottom sheets ---------- */
@@ -847,17 +937,18 @@ const FM={
  phone:['phones','Save phone number',[['t','Name','text'],['n','Phone number','tel']]],
  doc:['docs','Document & expiry',[['t','Document name','text'],['n','Number / details','text'],['d','Expiry date','date']]]
 };
-const fld=([k,l,t,o,df])=>t=='sel'?`<label class="l">${l}<select name="${k}">${o.map(x=>`<option>${x}</option>`).join('')}</select></label>`
- :t=='chips'?`<div class="fl">${o.map(x=>`<label class="rc"><input type="radio" name="${k}" value="${x}"${x==df?' checked':''}><span>${x}</span></label>`).join('')}</div>`
- :t=='area'?`<textarea name="${k}" placeholder="${l}" rows="3"></textarea>`
- :t=='date'?`<label class="l">${l}<input name="${k}" type="date"${k=='d'&&page=='money'?' value="'+today()+'"':''}></label>`
- :t=='amt'?`<input class="amt" name="${k}" type="number" step="any" inputmode="decimal" placeholder="0.00" aria-label="${l}">`
- :t=='cat'?`<input name="${k}" placeholder="${l}"><div class="fl">${CATS.map(c=>`<button type="button" data-a="cat:${c}">${c}</button>`).join('')}</div>`
- :`<input name="${k}" type="${t}" placeholder="${l}" aria-label="${l}"${t=='number'?' step="any" inputmode="decimal"':''}>`;
-function sheet(keys,k,still){
+const fld=([k,l,t,o,df])=>t=='sel'?`<label class="l">${l}<select name="${k}">${o.map(x=>`<option${x==EV[k]?' selected':''}>${x}</option>`).join('')}</select></label>`
+ :t=='chips'?`<div class="fl">${o.map(x=>`<label class="rc"><input type="radio" name="${k}" value="${x}"${x==(EV[k]||df)?' checked':''}><span>${x}</span></label>`).join('')}</div>`
+ :t=='area'?`<textarea name="${k}" placeholder="${l}" rows="3">${e(EV[k]||'')}</textarea>`
+ :t=='date'?`<label class="l">${l}<input name="${k}" type="date"${EV[k]!=null?' value="'+e(EV[k])+'"':k=='d'&&page=='money'?' value="'+today()+'"':''}></label>`
+ :t=='amt'?`<input class="amt" name="${k}" type="number" step="any" inputmode="decimal" placeholder="0.00" aria-label="${l}"${EV[k]!=null?' value="'+e(EV[k])+'"':''}>`
+ :t=='cat'?`<input name="${k}" placeholder="${l}" value="${e(EV[k]||'')}"><div class="fl">${CATS.map(c=>`<button type="button" data-a="cat:${c}">${c}</button>`).join('')}</div>`
+ :`<input name="${k}" type="${t}" placeholder="${l}" aria-label="${l}" value="${e(EV[k]==null?'':EV[k])}"${t=='number'?' step="any" inputmode="decimal"':''}>`;
+function sheet(keys,k,still,it){
   const old=$('xs');if(old)old.remove();
+  EV=it?Object.assign({},it,{b:it.l?it.l.map(i=>i.t).join('\n'):it.b,k:it.k||(it.l?'Checklist':'Note')}):{};
   const f=FM[k];
-  X.insertAdjacentHTML('beforeend',`<div class="xs${still?' ns':''}" id="xs"><div class="xsb" data-a="close"></div><div class="xsh" role="dialog" aria-modal="true"><i class="grab"></i>${keys.length>1?`<div class="seg">${keys.map(a=>`<button type="button" class="${a==k?'on':''}" data-a="sh:${a}:${keys.join(',')}">${FM[a][1].replace(/^New |^Add /,'').replace(/^./,c=>c.toUpperCase())}</button>`).join('')}</div>`:`<h3>${f[1]}</h3>`}<form class="f" data-f="${f[0]}" data-k="${k}">${f[2].map(fld).join('')}<button class="p">Save</button></form></div></div>`);
+  X.insertAdjacentHTML('beforeend',`<div class="xs${still?' ns':''}" id="xs"><div class="xsb" data-a="close"></div><div class="xsh" role="dialog" aria-modal="true"><i class="grab"></i>${keys.length>1?`<div class="seg">${keys.map(a=>`<button type="button" class="${a==k?'on':''}" data-a="sh:${a}:${keys.join(',')}">${FM[a][1].replace(/^New |^Add /,'').replace(/^./,c=>c.toUpperCase())}</button>`).join('')}</div>`:`<h3>${it?'Edit':f[1]}</h3>`}<form class="f" data-f="${f[0]}" data-k="${k}"${it?' data-id="'+it.id+'"':''}>${f[2].map(fld).join('')}<button class="p">Save</button></form></div></div>`);
   setTimeout(()=>{const i=X.querySelector('#xs .amt,#xs input[type=text],#xs input:not([type=radio]):not([type=date])');i&&i.focus()},380);
 }
 const closeSheet=()=>{const s=$('xs');if(s)s.remove()};
@@ -921,6 +1012,16 @@ function nl(){
   if(nt=='Documents')return `<section class="c span"><h3>Documents & expiry dates</h3>${list('docs',[...D.docs].filter(x=>m(x.t,x.n)).sort((a,b)=>(a.d||'9').localeCompare(b.d||'9')),60,'No documents saved yet.')}</section>`;
   return `<section class="c span"><h3>Receipts & document scans<em>this device only</em></h3><div class="row"><input id="xsn" placeholder="Title (optional)"><input id="xsf" type="file" accept="image/*" capture="environment"></div><div class="sc" id="xsl"></div></section>`;
 }
+/* ---------- offline AI (runs on this device, no download) ---------- */
+const STOP=new Set('the and for that with this from have are was were but not you your has had they their will would can could about into than then them which what when where there been being also its our out all any one more most some such only over just very should may might said says like get got how why who'.split(' '));
+const words=t=>(t.toLowerCase().match(/[\p{L}]{3,}/gu)||[]).filter(w=>!STOP.has(w));
+function freq(t){const f={};words(t).forEach(w=>f[w]=(f[w]||0)+1);return f}
+function topSent(t,n){
+  const S=(t.replace(/\s+/g,' ').match(/[^.!?。]+[.!?。]*/g)||[t]).map(x=>x.trim()).filter(x=>x.length>12),f=freq(t);
+  if(S.length<=n)return S;
+  return S.map((s,i)=>{const w=words(s);return{i,s,v:w.reduce((a,x)=>a+f[x],0)/(Math.sqrt(w.length)||1)*(i==0?1.25:1)}}).sort((a,b)=>b.v-a.v).slice(0,n).sort((a,b)=>a.i-b.i).map(x=>x.s);
+}
+V.ai=()=>`<section class="c span"><h3>Orbit AI<em>works offline · text stays on your device</em></h3><textarea id="xat" rows="8" placeholder="Paste an email, article or notes here">${e(aiT)}</textarea><div class="fl" style="margin-top:12px"><button class="on" data-a="ai:sum">Summarize</button><button data-a="ai:pts">Key points</button><button data-a="ai:kw">Keywords</button><button data-a="ai:cln">Clean up</button></div><div id="xao"></div></section>`;
 /* ---------- tools logic ---------- */
 let tmode='add';
 function tcalc(){
@@ -977,6 +1078,19 @@ async function loadScans(){const el=$('xsl');if(!el)return;try{const a=(await id
 async function addScan(f){if(!f)return;const t=($('xsn').value||'Scan '+today()).trim();try{const u=await shrink(f);await idbDo('readwrite',s=>s.put({id:Date.now(),t,u}))}catch(x){}loadScans()}
 /* ---------- actions ---------- */
 const act={
+ ed:a=>{const m={tasks:'task',events:'event',tx:'tx',bills:'bill',notes:'note',phones:'phone',docs:'doc'},it=D[a[1]].find(i=>i.id==a[2]);if(it)sheet([m[a[1]]],m[a[1]],1,it)},
+ ai:a=>{
+  const o=$('xao'),t=($('xat').value||'').trim();
+  if(a[1]=='copy'){navigator.clipboard&&navigator.clipboard.writeText(aiR);return}
+  if(a[1]=='save'){if(!aiR)return;D.notes.unshift({id:Date.now(),t:'AI: '+aiR.slice(0,28),k:'Note',b:aiR});save();o.insertAdjacentHTML('beforeend','<small>Saved to Notes.</small>');return}
+  if(!t){o.innerHTML='<div class="res"><small>Paste some text first.</small></div>';return}
+  const n=words(t).length,cnt=(t.match(/[.!?。]+/g)||[1]).length;
+  if(a[1]=='sum')aiR=topSent(t,Math.max(1,Math.min(5,Math.ceil(cnt/4)))).join(' ');
+  else if(a[1]=='pts')aiR=topSent(t,5).map(x=>'• '+x).join('\n');
+  else if(a[1]=='kw'){const f=freq(t);aiR=Object.keys(f).sort((x,y)=>f[y]-f[x]).slice(0,8).join(', ')}
+  else aiR=t.replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').replace(/\s+([,.!?;:])/g,'$1').replace(/(^|[.!?]\s+)([a-z])/g,(m,p,c)=>p+c.toUpperCase()).trim();
+  o.innerHTML=`<div class="res"><small>${n} words · ${Math.max(1,Math.round(n/220))} min read</small><div style="white-space:pre-wrap;margin-top:6px">${e(aiR)}</div><div class="row" style="margin-top:10px"><button class="x" data-a="ai:copy">Copy</button><button class="x" data-a="ai:save">Save as note</button></div></div>`;
+ },
  go:a=>go(a[1]),
  new:a=>{const k=a[1];if(k=='planner')sheet(['task','event'],'task');else sheet([k],k)},
  sh:a=>sheet(a[2].split(','),a[1],1),
@@ -1005,7 +1119,7 @@ const act={
  scd:async a=>{try{await idbDo('readwrite',s=>s.delete(+a[1]))}catch(x){}loadScans()}
 };
 /* ---------- navigation ---------- */
-const NAV=[['home','Home','<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],['planner','Planner','<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>'],['money','Money','<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1.2"/>'],['tools','Tools','<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.3-.7-.7-2.3z"/>'],['notes','Notes','<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>']];
+const NAV=[['home','Home','<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],['planner','Planner','<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>'],['money','Money','<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1.2"/>'],['tools','Tools','<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.3-.7-.7-2.3z"/>'],['notes','Notes','<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>'],['ai','AI','<path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.500 9.500l4.700-1.8z"/><path d="M18 15l.8 2.200L21 18l-2.200.8L18 21l-.8-2.200L15 18l2.200-.8z"/>']];
 const nav='<i class="ind"></i>'+NAV.map(([k,l,p])=>`<button type="button" data-p="${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>${l}</button>`).join('');
 $('xtop').innerHTML=nav;$('xbot').innerHTML=nav;
 function ind(){document.querySelectorAll('.xnav').forEach(n=>{const b=n.querySelector('button.on'),i=n.querySelector('.ind');if(b&&i&&n.offsetWidth){i.style.width=b.offsetWidth+'px';i.style.transform='translateX('+b.offsetLeft+'px)'}})}
@@ -1034,13 +1148,15 @@ X.addEventListener('submit',ev=>{
   if(f=='tx'?!(+o.a>0):!o.t){fm.classList.remove('shake');void fm.offsetWidth;fm.classList.add('shake');return}
   if(o.a!==undefined)o.a=+o.a;if(f=='tx'&&!o.d)o.d=today();
   if(f=='notes'&&o.k=='Checklist')o.l=o.b.split('\n').filter(Boolean).map(t=>({t,d:0}));
-  D[f].unshift(o);save();closeSheet();go(page,1);
+  if(fm.dataset.id){const i=D[f].findIndex(x=>x.id==fm.dataset.id);if(i>-1){const old=D[f][i];o.id=old.id;if(f=='notes'&&o.k=='Checklist')o.l=o.b.split('\n').filter(Boolean).map(t=>({t,d:(old.l||[]).some(z=>z.t==t&&z.d)?1:0}));const n=Object.assign({},old,o);if(f=='notes'&&o.k!='Checklist')delete n.l;D[f][i]=n}}else D[f].unshift(o);
+  save();closeSheet();go(page,1);
 });
 X.addEventListener('input',ev=>{
   const i=ev.target.id;
   if(i=='xq'){q=ev.target.value;const n=$('xnl');if(n)n.innerHTML=nl()}
   else if(i=='xta'||i=='xtd'||i=='xtt')tcalc();
   else if(/^xc[lwhqku]$/.test(i))cprev();
+  else if(i=='xat')aiT=ev.target.value;
   else if(i=='xbud'){D.budget=+ev.target.value||0;save()}
 });
 X.addEventListener('change',ev=>{
@@ -1061,7 +1177,7 @@ go('home');pull();setTimeout(ind,150);
 window.__x={go};
 })();
 
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=3').then(r=>r.update()).catch(()=>{});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=4').then(r=>r.update()).catch(()=>{});
 </script>
 </body>
 </html>
