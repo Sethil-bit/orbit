@@ -358,7 +358,38 @@ html.bg *,html.bg *::before{animation-play-state:paused!important}
     <div class="clocks">
       <div class="clock"><i></i><b id="tK">--:--:--</b><span id="tkl">Local</span></div>
       <div class="clock" id="cnClock"><i></i><b id="tB">--:--:--</b><span id="tbd">Beijing</span></div>
-      <button class="theme" id="gear" type="button" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></button>
+      <button class="theme" id="gear" type="button"
+        aria-label="Settings" title="Settings">
+    <svg viewBox="0 0 24 24"
+         width="24" height="24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+
+        <path d="M12 2.5
+        L13.2 2.5 L13.6 4.5
+        L15.2 5.1 L17 3.9
+        L18.7 5.6 L17.5 7.4
+        L18.1 9 L20.1 9.4
+        L20.1 11.8 L18.1 12.2
+        L17.5 13.8 L18.7 15.6
+        L17 17.3 L15.2 16.1
+        L13.6 16.7 L13.2 18.7
+        L10.8 18.7 L10.4 16.7
+        L8.8 16.1 L7 17.3
+        L5.3 15.6 L6.5 13.8
+        L5.9 12.2 L3.9 11.8
+        L3.9 9.4 L5.9 9
+        L6.5 7.4 L5.3 5.6
+        L7 3.9 L8.8 5.1
+        L10.4 4.5 Z"/>
+
+        <circle cx="12" cy="10.6" r="3"/>
+    </svg>
+</button>
       <button class="theme" id="theme" type="button" aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg></button>
     </div>
   </header>
